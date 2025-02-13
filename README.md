@@ -1,5 +1,5 @@
 # ATS-Resume-checker-
-Team 13
+is repository of Distributed Computing project. This repository contents include code, documents and other project relaated files.
 
 ## Members
 
