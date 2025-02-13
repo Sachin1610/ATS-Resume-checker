@@ -1,5 +1,5 @@
 # ATS-Resume-checker-
-This repository of Distributed Computing project. This repository contents include code, documents and other project relaated files.
+This repository of Distributed Computing project. This repository contents include code, documents and other project related files.
 
 ## Members
 
