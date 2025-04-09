@@ -1,4 +1,4 @@
-# ATS-Resume-checker-
+# Skill-Based Course Recommender Using AI-
 This repository contains code, documents, and other project-related files for the Distributed Computing project.
 
 ## Members
