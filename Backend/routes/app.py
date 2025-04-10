@@ -32,7 +32,20 @@ def upload_data():
 #get_job_description_skills
 @app.route('/extracts_job_skills', methods=['GET'])
 def extract_job_requirement_skills():
-    pass
+    title = request.args.get('job_title')
+    if not title:
+        return jsonify(
+            {
+                "error": "Job title is required"
+            }), 400
+    job_description = fetch_jobs(title)
+    if isinstance(job_description, str):  
+        
+        return jsonify(
+            {
+            "error": job_description}), 500
+    skills = extract_skills(job_description)
+    return jsonify({"skills": list(skills)})
 
 #get recommended course
 @app.route("/get_recommended_courses", methods=["GET"])
