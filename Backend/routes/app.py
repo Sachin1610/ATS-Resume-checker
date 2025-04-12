@@ -50,7 +50,32 @@ def extract_job_requirement_skills():
 #get recommended course
 @app.route("/get_recommended_courses", methods=["GET"])
 def get_recommended_courses():
-    pass
+    filename_prefix = request.args.get('filename_prefix')  
+    if not filename_prefix:
+        return jsonify(
+            {"error": "filename prefix parameter is missing"}
+            ), 400
+    s3_object_key = f"recommendations/{filename_prefix}_recommendations.json" 
+
+    try:
+        s3response = s3_client.get_object(Bucket='course-recommendations', Key=s3_object_key)
+        responsebody=s3response["Body"]
+        filecontent = responsebody.read().decode("utf-8")
+        recommendedcourses = json.loads(filecontent)
+        return jsonify(recommendedcourses), 200
+    
+    except s3_client.exceptions.NoSuchKey:
+
+        return jsonify(
+            {"error": "File does not exists"
+             }
+             ), 404
+    
+    except Exception as e:
+
+        return jsonify({
+            "error": str(e)
+            }), 500
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
