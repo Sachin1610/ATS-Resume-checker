@@ -16,7 +16,7 @@ def analyze_skills(resume_skills_text, job_description_skills):
         for skill in l.split(","):
             strip_skill = skill.strip()
             if strip_skill: 
-                resume_skills_extraction.add(strip_skill)
+                resume_skills_extraction.add(strip_skill.lower())
 
 
     matched_skills = list(job_description_skills & resume_skills_extraction)
@@ -53,7 +53,7 @@ def retrieve_and_analyze_skills_from_s3(bucket_name, object_key):
 
 def recommend_courses(missing_skills):
     recommended_courses_list = []
-    
+    missing_skill_names = []
     for missing_skill in missing_skills:
         #skills table scan
         response_data = skills_table.scan(
@@ -65,6 +65,7 @@ def recommend_courses(missing_skills):
 
             if items_in_response and 'skill_id' in items_in_response[0]:
                 
+                missing_skill_names.append(missing_skill)
                 skill_id = items_in_response[0]['skill_id']
 
             else:
@@ -86,7 +87,7 @@ def recommend_courses(missing_skills):
         else:
             print(f"DEBUG: skills id not found for missing_skill: {missing_skill}") 
 
-    return recommended_courses_list
+    return recommended_courses_list,missing_skill_names
 
 def store_recommendations_in_s3(recommended_courses, bucket_name, object_key):
     try:
@@ -115,7 +116,9 @@ def lambda_handler(event, context):
 
             missing_skills = result["missing_skills"]
 
-            recommended_courses = recommend_courses(missing_skills)
+            recommended_courses,missing_skill_names = recommend_courses(missing_skills)
+            result["recommended_courses"]=recommended_courses
+            result["missing_skill_names"]=missing_skill_names
 
             file_name = object_key.split('/')[-1]
 
@@ -123,7 +126,7 @@ def lambda_handler(event, context):
 
             recommendation_s3_key = f"recommendations/{final_filename}"
             
-            if store_recommendations_in_s3(recommended_courses, 'course-recommendations', recommendation_s3_key):
+            if store_recommendations_in_s3(result, 'course-recommendations', recommendation_s3_key):
 
                 return {"statusCode": 200, "body": json.dumps({"analysis_result": result, "recommendation_s3_key": recommendation_s3_key})}
             
