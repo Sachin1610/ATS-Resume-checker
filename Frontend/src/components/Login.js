@@ -47,7 +47,7 @@ const ImageUpload = () => {
 
 
     try {
-      const response = await fetch('http://3.141.29.233:5000/upload_data', {
+      const response = await fetch('http://3.141.31.101:5000/upload_data', {
         method: 'POST',
         body: formData,
       });
