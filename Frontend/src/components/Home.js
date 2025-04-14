@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Typography, Box, List, ListItem, ListItemText } from '@mui/material';
+import { Button, Typography, Box, List, ListItem, ListItemText,Chip } from '@mui/material';
 import wallpaper_background from "../assets/wallpaper.jpg";
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 
 const HomePage = () => {
-  const [loading, setLoadingData] = useState(false);
+  const [loading, setLoadingData] = useState(false);//useState is a react hook that helps in adding state to a component
   const [formData, setformData] = useState(null);
   const [error, setError] = useState(null);
   const loc = useLocation();
@@ -25,14 +25,14 @@ const HomePage = () => {
 
     try {
       const response = await axios.get(
-        `http://3.141.29.233:5000/get_recommended_courses?filename_prefix=${filename}`
+        `http://3.141.31.101:5000/get_recommended_courses?filename_prefix=${filename}`
       );
       setformData(response.data);
     } 
     catch (err) 
     
     {
-      setError(err.message);
+      //setError(err.message);
     } 
     
     finally 
@@ -58,35 +58,18 @@ const HomePage = () => {
         }}
       >
         <Typography
-          variant="h3"
-          color="white"
-          sx={{
-            marginTop: "5vh",
-            marginBottom: "10vh"
-          }}
-        >
-          <b style={{ marginLeft: "20rem" }}>Course Recommendation System</b>
-        </Typography>
+                  variant="h3"
+                  color="White"
+                  sx={{
+                    marginTop: "5vh",
+                    marginBottom: "10vh"
+                  }}
+                >
+                  <b style={{ marginLeft: "20rem" }}>Course Recommendation System</b>
+                </Typography>
 
-        <div>
-          <Box
-            sx={{
-              minWidth: 300,
-              marginLeft: "auto",
-              backgroundColor: "white",
-              borderRadius: "2vh",
-              opacity: 0.8,
-              marginRight: "auto",
-              marginTop: 8,
-              padding: "2rem",
-              maxWidth: 480,
-            }}
-          >
-            <Typography variant="h6" align="center" gutterBottom>
-              Recommended Courses
-            </Typography>
 
-            <Button
+                <Button
               variant="contained"
               color="primary"
               onClick={() => {
@@ -98,33 +81,65 @@ const HomePage = () => {
                   onRefresh(filename);
                 }
               }}
-              sx={{ mt: 2, display: 'block', margin: '0 auto' }}
+              sx={{ mt: 2, display: 'block', margin: 'auto' }}
             >
               Refresh
             </Button>
+        <div>
+        {formData && formData.recommended_courses && (
+  <Box
+    sx={{
+      minWidth: '75%',
+      marginLeft: "auto",
+      backgroundColor: "white",
+      borderRadius: "2vh",
+      opacity: 0.8,
+      marginRight: "auto",
+      marginTop: 8,
+      padding: "2rem",
+      maxWidth: 480,
+    }}
+  >
+    {loading && <Typography>Loading .....</Typography>}
 
-            {loading && <Typography>Loading Recommendations...</Typography>}
+    <Box mt={2}>
+      <Typography variant="h6">Recommended Courses</Typography>
+      <List>
+        {formData.recommended_courses.map((course, index) => (
+          <ListItem key={index}>
+            <ListItemText
+              primary={course.course_name}
+              secondary={`Provider: ${course.provider}`}
+            />
+          </ListItem>
+        ))}
+      </List>
 
-            {error && <Typography color="error">{error}</Typography>}
-            {formData && (
-              <Box mt={2}>
-                <List>
-                  
-                  {formData.map((course, index) => (
-                    <ListItem key={index}>
+      <Typography variant="h6" mt={2}>Matched Skills</Typography>
+      <Box 
+      sx={{ display: 'flex',
+         flexWrap: 'wrap', 
+         gap: 0.9 }}>
+        {formData.matched_skills.map((s, i) => (
+          <Chip key={i} label={s} variant="contained" />
+        ))}
+      </Box>
 
-                      <ListItemText
+      <Typography 
+      variant="h6" mt={2}>Missing Skills
 
-                        primary={course.course_name}
+      </Typography>
+      <Box 
+      sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.9 }}
+      >
+        {formData.missing_skill_names.map((s, i) => (
+          <Chip key={i} label={s} variant="contained" />
+        ))}
+      </Box>
+    </Box>
+  </Box>
+)}
 
-                        secondary={`Provider: ${course.provider}`}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </Box>
-            )}
-          </Box>
         </div>
       </div>
     </fragment>
