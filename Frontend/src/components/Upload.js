@@ -133,6 +133,10 @@ const ImageUpload = () => {
                 >
                   <MenuItem value={"Software Developer"}>Software Developer</MenuItem>
                   <MenuItem value={"GCP Data Engineer"}>Cloud Architect</MenuItem>
+                  <MenuItem value={"Python Developer"}>Python Developer</MenuItem>
+                  <MenuItem value={"Web developer"}>Web developer</MenuItem>
+                  <MenuItem value={"devOps Engineer"}>devOps Engineer</MenuItem>
+                  <MenuItem value={"UI-UX Designer"}>UI-UX Designer</MenuItem>
                 </Select>
               </FormControl>
 
