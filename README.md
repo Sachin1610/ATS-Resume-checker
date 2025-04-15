@@ -20,7 +20,7 @@ An intelligent resume-based course recommendation engine that analyzes your uplo
 |---------------|---------------------------|
 | Frontend      | ReactJS                   |
 | Backend       | Flask (Python)            |
-| AI/API        |  RapidAPI, OpenAI API     |
+| AI/API        |  RapidAPI                 |
 | Database      | AWS DynamoDB              |
 | File Storage  | AWS S3 
 
