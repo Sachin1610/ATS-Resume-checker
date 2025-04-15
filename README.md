@@ -42,7 +42,7 @@ An intelligent resume-based course recommendation engine that analyzes your uplo
 ![Home Page](screenshots/HomePage.jpg)
 
 ### 🔹 Recommendation Display
-![Result Page](screenshots/result.jpg)
+![Result Page](screenshots/Result.jpg)
 
 
 
